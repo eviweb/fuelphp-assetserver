@@ -1,0 +1,17 @@
+/* 
+    Document   : example
+    Created on : 28 sept. 2012, 13:03:16
+    Author     : Eric VILLARD <dev@eviweb.fr>
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+* { 
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+}

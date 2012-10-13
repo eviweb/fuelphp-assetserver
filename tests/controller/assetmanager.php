@@ -66,12 +66,45 @@ class AssetManager extends \Fuel\Core\TestCase
 	 */
 	public function testAction_get()
 	{
+		// look for assets/css/example.css
 		$this->assertEquals(
 			file_get_contents(Helper::get_path('assets/css/example.css')),
 			\Request::forge('assetserver/assetmanager/get/default_test/example', true)
 				->execute()
 				->response()
 				->body()				
+		);
+		// look for assets/js/example.js
+		$this->assertEquals(
+			file_get_contents(Helper::get_path('assets/js/example.js')),
+			\Request::forge('assetserver/assetmanager/get/default_test/example/js', true)
+				->execute()
+				->response()
+				->body()				
+		);
+		// look for assets/img/fuelphp.png
+		$this->assertEquals(
+			file_get_contents(Helper::get_path('assets/img/fuelphp.png')),
+			\Request::forge('assetserver/assetmanager/get/default_test/fuelphp/png', true)
+				->execute()
+				->response()
+				->body()				
+		);
+		// look for outside/example.php
+		$this->assertEquals(
+			403,
+			\Request::forge('assetserver/assetmanager/get/default_test/example/php', true)
+				->execute()
+				->response()
+				->status				
+		);
+		// look for a non existing file
+		$this->assertEquals(
+			404,
+			\Request::forge('assetserver/assetmanager/get/default_test/noexisting', true)
+				->execute()
+				->response()
+				->status				
 		);
 	}
 }

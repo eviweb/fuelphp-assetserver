@@ -31,5 +31,5 @@
  */
 
 return array(
-    'assetserver/assetmanager/(:segment)/:theme/:asset((/:ext)?)'      => 'assetserver/assetmanager/$1'
+	'assetserver/assetmanager/(:segment)/:theme/:asset((/:ext)?)' => 'assetserver/assetmanager/$1'
 );

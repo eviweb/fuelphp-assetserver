@@ -31,7 +31,7 @@
  */
 
 return array(
-    'paths' => array(
-	APPPATH.'themes'.DS,
-    ),
+	'paths' => array(
+		APPPATH.'themes'.DS,
+	),
 );

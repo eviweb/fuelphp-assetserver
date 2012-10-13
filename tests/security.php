@@ -70,6 +70,9 @@ class Security extends \Fuel\Core\TestCase
 			\Assetserver\Security::is_allowed('text/plain')
 		);
 		$this->assertTrue(
+			\Assetserver\Security::is_allowed('text/css')
+		);
+		$this->assertTrue(
 			\Assetserver\Security::is_allowed('image/png')
 		);
 		$this->assertTrue(

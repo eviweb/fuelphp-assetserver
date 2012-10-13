@@ -31,12 +31,12 @@
  */
 
 return array(
-    'security' => array(
-	'types_allowed' => array(
-	    'text/plain' => true,
-	    'text/html'  => true,
-	    'image/*'    => true,
-	    'application/x-javascript' => true,
-	)
-    ),
+	'security' => array(
+		'types_allowed' => array(
+			'text/*'     => true,
+			'text/x-php' => false,
+			'image/*'    => true,
+			'application/x-javascript' => true,
+		)
+	),
 );

@@ -52,8 +52,10 @@ final class Security
 	{
 		if (empty($type)) return false;
 		$types = \Config::get('assetserver.security.types_allowed');
-		$multi = preg_replace('/\/\w+/', '/*', $type);
-		return (isset($types[$type]) && $types[$type])
-			|| (isset($types[$multi]) && $types[$multi]);
+		$multi = preg_replace('/\/.+/', '/*', $type);
+		return (isset($types[$type]) && $types[$type] === true)
+			|| (!isset($types[$type]) 
+				&& isset($types[$multi]) 
+				&& $types[$multi] === true);
 	}
 }

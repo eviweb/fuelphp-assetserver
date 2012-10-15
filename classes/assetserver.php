@@ -52,8 +52,14 @@ class Assetserver
 		\Config::load('assetserver::types', 'assetserver');
 		\Config::load('assetserver::routes', 'routes');		
 		\Config::load('theme', true);
+		// get module default paths
 		$default_paths = \Config::get('assetserver.paths', array());
+		// get app paths
 		$theme_paths   = \Config::get('theme.paths', array());
-		\Config::set('assetserver.paths', array_unique(array_merge($default_paths, $theme_paths)));
+		// merge both
+		$final_paths = array_unique(array_merge($default_paths , $theme_paths));
+		// we need to reindex the final array because array_unique does not do it
+		$indexes = range(0, count($final_paths)-1);
+		\Config::set('assetserver.paths', array_combine($indexes, $final_paths));
 	}
 }

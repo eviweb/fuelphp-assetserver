@@ -45,6 +45,7 @@ use \Assetserver\test\helpers\Helper;
  */
 class Assetserver extends \Fuel\Core\TestCase
 {
+
 	/**
 	 * set up the test environment
 	 */
@@ -60,31 +61,93 @@ class Assetserver extends \Fuel\Core\TestCase
 	{
 		Helper::restore();
 	}
-	
+
 	/**
 	 * @covers Assetserver\Assetserver::_init
 	 */
 	public function test_init()
 	{
-		\Assetserver\Assetserver::_init();
-		
 		// check routes
 		$module_routes = Helper::get_routes();
 		$config_routes = \Config::get('routes');
-		foreach($module_routes as $pattern => $route) {
+		foreach ($module_routes as $pattern => $route)
+		{
 			$this->assertNotNull($config_routes[$pattern]);
 			$this->assertEquals($route, $config_routes[$pattern]);
 		}
-		
+
 		// check paths
 		$module_config = Helper::get_config();
-		$module_paths  = array_merge(
-			$module_config['paths'], 
-			\Config::get('theme.paths', array())
+		$module_paths = array_merge(
+		    $module_config['paths'], \Config::get('theme.paths', array())
 		);
-		$paths        = \Config::get('assetserver.paths');
-		foreach($module_paths as $path) {
+		$paths = \Config::get('assetserver.paths');
+		foreach ($module_paths as $path)
+		{
 			$this->assertContains($path, $paths);
 		}
 	}
+
+	/**
+	 * @covers Assetserver\Assetserver::add_path
+	 */
+	public function testAdd_path()
+	{
+		$path_1 = __DIR__;
+		$path_2 = dirname(__DIR__);
+		$path_3 = dirname(dirname(__DIR__));
+		$path_4 = __DIR__;
+		$backup = \Config::get('assetserver.paths');
+		//
+		$this->assertNotContains($path_1, \Config::get('assetserver.paths'));
+		\Assetserver\Assetserver::add_path($path_1);
+		$this->assertContains($path_1, \Config::get('assetserver.paths'));
+		\Assetserver\Assetserver::add_path(array($path_1, $path_2, $path_3, $path_4));
+		$this->assertContains($path_1, \Config::get('assetserver.paths'));
+		$this->assertContains($path_2, \Config::get('assetserver.paths'));
+		$this->assertContains($path_3, \Config::get('assetserver.paths'));
+		$this->assertContains($path_4, \Config::get('assetserver.paths'));
+
+		$values = array_count_values(\Config::get('assetserver.paths'));
+		foreach ($values as $num)
+		{
+			$this->assertEquals(1, $num);
+		}
+
+		\Config::set('assetserver.paths', $backup);
+		$this->assertSame($backup, \Config::get('assetserver.paths'));
+	}
+
+	/**
+	 * @covers Assetserver\Assetserver::remove_path
+	 */
+	public function testRemove_path()
+	{
+		$path_1 = __DIR__;
+		$path_2 = dirname(__DIR__);
+		$path_3 = dirname(dirname(__DIR__));
+		$path_4 = __DIR__;
+		$backup = \Config::get('assetserver.paths');
+		//
+		\Assetserver\Assetserver::add_path(array($path_1, $path_2, $path_3, $path_4));
+		$this->assertContains($path_1, \Config::get('assetserver.paths'));
+		$this->assertContains($path_2, \Config::get('assetserver.paths'));
+		$this->assertContains($path_3, \Config::get('assetserver.paths'));
+		$this->assertContains($path_4, \Config::get('assetserver.paths'));
+
+		\Assetserver\Assetserver::remove_path($path_1);
+		$this->assertNotContains($path_1, \Config::get('assetserver.paths'));
+		$this->assertContains($path_2, \Config::get('assetserver.paths'));
+		$this->assertContains($path_3, \Config::get('assetserver.paths'));
+		$this->assertNotContains($path_4, \Config::get('assetserver.paths'));
+
+		\Assetserver\Assetserver::remove_path(array($path_1, $path_2, $path_3, $path_4));
+		$this->assertNotContains($path_1, \Config::get('assetserver.paths'));
+		$this->assertNotContains($path_2, \Config::get('assetserver.paths'));
+		$this->assertNotContains($path_3, \Config::get('assetserver.paths'));
+		$this->assertNotContains($path_4, \Config::get('assetserver.paths'));
+
+		$this->assertSame($backup, \Config::get('assetserver.paths'));
+	}
+
 }

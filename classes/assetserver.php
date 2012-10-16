@@ -42,6 +42,7 @@ namespace Assetserver;
  */
 class Assetserver
 {
+
 	/**
 	 * module initialization
 	 */
@@ -50,16 +51,68 @@ class Assetserver
 		\Config::load('assetserver::config', 'assetserver');
 		\Config::load('assetserver::security', 'assetserver');
 		\Config::load('assetserver::types', 'assetserver');
-		\Config::load('assetserver::routes', 'routes');		
+		\Config::load('assetserver::routes', 'routes');
 		\Config::load('theme', true);
 		// get module default paths
 		$default_paths = \Config::get('assetserver.paths', array());
 		// get app paths
-		$theme_paths   = \Config::get('theme.paths', array());
+		$theme_paths = \Config::get('theme.paths', array());
 		// merge both
-		$final_paths = array_unique(array_merge($default_paths , $theme_paths));
+		$final_paths = array_unique(array_merge($default_paths, $theme_paths));
 		// we need to reindex the final array because array_unique does not do it
-		$indexes = range(0, count($final_paths)-1);
+		$indexes = range(0, count($final_paths) - 1);
 		\Config::set('assetserver.paths', array_combine($indexes, $final_paths));
 	}
+
+	/**
+	 * add a path to assetserver.paths
+	 * 
+	 * @param string $path	path to add to assetserver.paths
+	 */
+	public static function add_path($path)
+	{
+		$paths = \Config::get('assetserver.paths');
+
+		if (!is_array($path))
+		{
+			$path = array($path);
+		}
+
+		foreach ($path as $item)
+		{
+			if (!in_array($item, $paths))
+			{
+				array_push($paths, $item);
+			}
+		}
+
+		\Config::set('assetserver.paths', $paths);
+	}
+
+	/**
+	 * remove a path from assetserver.paths
+	 * 
+	 * @param string $path	path to remove from assetserver.paths
+	 */
+	public static function remove_path($path)
+	{
+		$paths = \Config::get('assetserver.paths');
+
+		if (!is_array($path))
+		{
+			$path = array($path);
+		}
+
+		foreach ($path as $item)
+		{
+			$i = array_search($item, $paths);
+			if ($i !== false)
+			{
+				array_splice($paths, $i, 1);
+			}
+		}
+
+		\Config::set('assetserver.paths', $paths);
+	}
+
 }

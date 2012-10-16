@@ -65,9 +65,9 @@ class Assetserver
 	}
 
 	/**
-	 * add a path to assetserver.paths
+	 * add one or many paths to assetserver.paths
 	 * 
-	 * @param string $path	path to add to assetserver.paths
+	 * @param mixed $path	path(s) (as string or array) to add to assetserver.paths
 	 */
 	public static function add_path($path)
 	{
@@ -90,9 +90,9 @@ class Assetserver
 	}
 
 	/**
-	 * remove a path from assetserver.paths
+	 * remove one or many paths from assetserver.paths
 	 * 
-	 * @param string $path	path to remove from assetserver.paths
+	 * @param string $path	path(s) (as string or array) to remove from assetserver.paths
 	 */
 	public static function remove_path($path)
 	{
